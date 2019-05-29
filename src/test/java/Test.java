@@ -1,37 +1,44 @@
+import java.util.Arrays;
+
 /**
  * Created by wukun on 2019/5/28.
  */
 public class Test {
     public static void main(String[] args){
-        int n = 30;
-        for(int i = 1; i <= n; i++){
-            if(i == n){
-                System.out.print(test(i));
-                continue;
-            }
-            System.out.print(test(i) + ",");
-        }
+        int[] nums = {1,3,5,7,2,4,6,8};
+        int left = 0;
+        int right = nums.length - 1;
+        int mid = (left+right)/2;
+
+        int[] temp = new int[nums.length];
+        merging(nums, left, mid, right, temp);
+        System.out.println(Arrays.toString(nums));
     }
 
-    /**
-     * 斐波那契数列(兔子数列)
-     * 递推公式：f(n) = f(n-1) + f(n-2)
-     * 递推终止条件：f(1) = 1,f(2) = 1
-     */
-    public static int test(int n){
-        if(n <= 2){
-            return 1;
+    public static void merging(int[] nums, int left, int mid, int right, int[] temp){
+        int index1 = left;
+        int index2 = mid + 1;
+        int t = 0;
+        while(index1 <= mid && index2 <= right){
+            if(nums[index1] <= nums[index2]){
+                temp[t++] = nums[index1++];
+            }else{
+                temp[t++] = nums[index2++];
+            }
         }
 
-        int index1 = 1;
-        int index2 = 1;
-        int result = 0;
-        for(int i = 2; i < n; i++){
-            result = index1 + index2;
-            index1 = index2;
-            index2 = result;
+        while(index1 <= mid){
+            temp[t++] = nums[index1++];
         }
 
-        return result;
+        while(index2 <= right){
+            temp[t++] = nums[index2++];
+        }
+
+        //将临时数组temp中数据复制到nums中去
+        t = 0;
+        while(t < nums.length){
+            nums[left++] = temp[t++];
+        }
     }
 }

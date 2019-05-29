@@ -1,5 +1,7 @@
 package cn.wukun;
 
+import java.util.Arrays;
+
 /**
  * 排序算法练习
  */
@@ -8,25 +10,22 @@ public class SortTest {
         //冒泡排序测试
         int[] nums = {1,3,5,7,2,4,8,6};
         bubble(nums);
-        for(int num:nums){
-            System.out.print(num + " ");
-        }
-        System.out.println();
+        System.out.println(Arrays.toString(nums));
 
         //插入排序测试
         int[] nums2 = {1,3,5,7,2,4,8,6};
         insert(nums2);
-        for(int num:nums2){
-            System.out.print(num + " ");
-        }
-        System.out.println();
+        System.out.println(Arrays.toString(nums2));
 
         //选择排序测试
         int[] nums3 = {10,1,3,5,7,2,4,8,6};
         select(nums3);
-        for(int num:nums3){
-            System.out.print(num + " ");
-        }
+        System.out.println(Arrays.toString(nums3));
+
+        //归并排序测试
+        int[] nums4 = {10,1,3,5,7,2,4,8,6};
+        merger(nums4);
+        System.out.println(Arrays.toString(nums4));
     }
 
     /**
@@ -101,6 +100,52 @@ public class SortTest {
             }
             nums[index] = nums[i];
             nums[i] = min;
+        }
+    }
+
+    /**
+     * 归并排序：
+     * 归并排序的核心思想还是蛮简单的。如果要排序一个数组，我们先把数组从中间分成前后两部分
+     * 然后对前后两部分分别进行排序，再将排好序的两部分合并在一起，这样整个数组就都有序了
+     */
+    public static void merger(int[] nums){
+        int[] temp = new int[nums.length];
+        mergerSort(nums, 0, nums.length-1, temp);
+    }
+
+    public static void mergerSort(int[] nums, int left, int right, int[] temp){
+        if(left < right){
+            int mid = (left + right) / 2;
+            mergerSort(nums, left, mid, temp);
+            mergerSort(nums, mid+1, right, temp);
+            merging(nums, left, mid, right, temp);
+        }
+    }
+
+    public static void merging(int[] nums, int left, int mid, int right, int[] temp){
+        int index1 = left;
+        int index2 = mid + 1;
+        int t = 0;
+        while(index1 <= mid && index2 <= right){
+            if(nums[index1] <= nums[index2]){
+                temp[t++] = nums[index1++];
+            }else{
+                temp[t++] = nums[index2++];
+            }
+        }
+
+        while(index1 <= mid){
+            temp[t++] = nums[index1++];
+        }
+
+        while(index2 <= right){
+            temp[t++] = nums[index2++];
+        }
+
+        //将临时数组temp中数据复制到nums中去
+        t = 0;
+        while(left <= right){
+            nums[left++] = temp[t++];
         }
     }
 }
