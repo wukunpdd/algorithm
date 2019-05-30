@@ -26,6 +26,12 @@ public class SortTest {
         int[] nums4 = {10,1,3,5,7,2,4,8,6};
         merger(nums4);
         System.out.println(Arrays.toString(nums4));
+
+        //快速排序测试
+        int[] nums5 = {10,1,3,11,5,9,7,13,2,4,6,8};
+        int[] temp = new int[nums5.length];
+        quick(nums5, 0, nums5.length - 1, temp);
+        System.out.println(Arrays.toString(nums5));
     }
 
     /**
@@ -122,6 +128,14 @@ public class SortTest {
         }
     }
 
+    /**
+     * 快速排序：
+     * 先选定数组中的一个元素
+     * 将所有小于等于该元素的元素移动到该元素前面
+     * 将所有大于该元素的元素移动到该元素后面
+     * 排序过后的数组就分成了两部分
+     * 再对这两部分进行同样的操作，直到所有元素排序完成即停止(left >= right)
+     */
     public static void merging(int[] nums, int left, int mid, int right, int[] temp){
         int index1 = left;
         int index2 = mid + 1;
@@ -147,5 +161,39 @@ public class SortTest {
         while(left <= right){
             nums[left++] = temp[t++];
         }
+    }
+
+    public static void quick(int[] nums, int left, int right, int[] temp){
+        if(left < right) {
+            int point = (left + right) / 2;
+            point = quickSort(nums, left, right, point, temp);
+            quick(nums, left, point, temp);
+            quick(nums, point+1, right, temp);
+        }
+    }
+
+    public static int quickSort(int[] nums, int left, int right, int point, int[] temp){
+        int start = left;
+        int end = right;
+        for(int i = left; i <= right; i++){
+            if(point == i){
+                continue;
+            }
+
+            if(nums[i] <= nums[point]){
+                temp[start++] = nums[i];
+            }else{
+                temp[end--] = nums[i];
+            }
+        }
+
+        temp[start] = nums[point];
+
+        start = left;
+        while(left <= right){
+            nums[left++] = temp[start++];
+        }
+
+        return end;
     }
 }
